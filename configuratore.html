@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Configuratore</title>
+</head>
+<script>
+
+function calculate(){
+
+ips=document.getElementById('IPs').value
+risorse=document.getElementById('Risorse').value
+console.log(ips)
+console.log(risorse)
+elps=0
+tot=ips/risorse
+if(tot >=1 && tot <= 10){
+elps=6
+}else if(tot >= 10 && tot <= 20){
+elps=4
+}else if(tot >= 20 && tot <= 30){
+elps=3
+}else{
+elps=2.5
+}
+ore=Math.round((ips/risorse)*elps*0.8)
+credito=Math.round((ips/risorse)*elps*0.2)
+giorni=Math.round(ore/8)
+document.getElementById('ore').innerHTML=ore
+document.getElementById('giorni').innerHTML=giorni
+document.getElementById('ris').innerHTML=ips/risorse
+document.getElementById('Credito').innerHTML=credito/8
+
+}
+
+</script>
+<body>
+
+<h1>Configuratore</h1>
+
+<h3>Numero di IPs</h3>
+<input onkeyup="calculate()" onkeydown="calculate()" id="IPs" type="number" />
+<h3>Numero di risorse</h3>
+<input onkeyup="calculate()" onkeydown="calculate()" id="Risorse" type="number" />
+
+<h3 >IPs a risorsa</h3>
+<p id="ris"></p>
+<h3 >Ore</h3>
+<p id="ore"></p>
+<h3>Giorni</h3>
+<p id="giorni"></p>
+<h3>Credito</h3>
+<p id="Credito"></p>
+</body>
+</html>
+
+
