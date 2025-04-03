@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Ricerca CVE inline su Vulners</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    textarea { width: 100%; max-width: 500px; }
+    button { font-size: 1em; margin-top: 10px; }
+    #result { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Ricerca CVE su Vulners</h1>
+  <p>Inserisci i CVE (separati da virgola o spazio):</p>
+  <textarea id="cveInput" rows="3" placeholder="Esempio: CVE-2016-1908, CVE-2023-51767, CVE-2014-1692"></textarea>
+  <br>
+  <button onclick="generaLink()">Genera Link</button>
+  
+  <div id="result"></div>
+  
+  <script>
+    function generaLink() {
+      const input = document.getElementById('cveInput').value;
+      // Suddivide il testo in base a spazi o virgole e rimuove le stringhe vuote
+      const cves = input.split(/[\s,]+/).filter(cve => cve.trim() !== "");
+      
+      if (cves.length === 0) {
+        document.getElementById('result').innerHTML = "<p style='color: red;'>Inserisci almeno un CVE valido.</p>";
+        return;
+      }
+      
+      // Crea la stringa per la query con ogni CVE racchiuso tra virgolette e separato da OR
+      const cveList = cves.map(cve => `"${cve.trim()}"`).join(' OR ');
+      const query = encodeURIComponent(`bulletinFamily:exploit AND cvelist:(${cveList})`);
+      const url = `https://vulners.com/search?query=${query}`;
+      
+      document.getElementById('result').innerHTML = `<p><a href="${url}" target="_blank">${url}</a></p>`;
+    }
+  </script>
+</body>
+</html>
