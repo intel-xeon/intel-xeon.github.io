@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Conta Origini</title>
+</head>
+<body>
+  <h3>Inserisci qui gli URL (uno per riga):</h3>
+  <textarea id="urlBox" rows="10" cols="50"></textarea>
+  <br><br>
+  <button onclick="contaOrigini()">Conta Origini</button>
+  <p id="output"></p>
+
+  <script>
+    function contaOrigini() {
+      const textarea = document.getElementById('urlBox');
+      const output = document.getElementById('output');
+      
+      // Ottieni tutte le righe
+      const righe = textarea.value.split('\n');
+      const origini = new Set();
+
+      righe.forEach(riga => {
+        try {
+          const url = new URL(riga.trim());
+          origini.add(url.origin);
+        } catch (e) {
+          // Ignora righe non valide
+        }
+      });
+
+      output.textContent = `Origini uniche trovate: ${origini.size}`;
+    }
+  </script>
+</body>
+</html>
