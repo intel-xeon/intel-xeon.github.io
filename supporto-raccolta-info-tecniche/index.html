@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modulo Censimento Cliente</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; color: #333; line-height: 1.6; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        h1, h2 { color: #1a73e8; }
+        .section { margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #fafafa; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"], input[type="email"], textarea, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        textarea { height: 100px; font-family: monospace; }
+        .contact-entry { background: #fff; padding: 15px; border-left: 4px solid #1a73e8; margin-bottom: 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; display: inline-block; text-decoration: none; text-align: center; }
+        .btn-add { background-color: #34a853; color: white; margin-top: 10px; }
+        .btn-remove { background-color: #ea4335; color: white; padding: 5px 10px; font-size: 12px; margin-top: 5px; }
+        .btn-submit { background-color: #1a73e8; color: white; width: 100%; font-size: 18px; margin-top: 20px; }
+        .btn-mail { background-color: #f39c12; color: white; margin-top: 15px; width: 100%; font-size: 18px; }
+        .output-box { margin-top: 30px; padding: 20px; background: #e8f0fe; border: 1px dashed #1a73e8; display: none; }
+        .required:after { content: " *"; color: red; }
+        .alert-message { padding: 12px; border-radius: 4px; margin-top: 10px; display: none; font-weight: bold; font-size: 0.9em; border: 1px solid #ffeeba; color: #856404; background-color: #fff3cd; }
+        .virtual-section { display: none; margin-top: 15px; border-top: 1px solid #ddd; padding-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Anagrafica Cliente</h1>
+    <form id="clientForm">
+        
+        <div class="section">
+            <h2>Dati Aziendali</h2>
+            <div class="form-group">
+                <label class="required">Nome Azienda</label>
+                <input type="text" name="nome_cliente" id="nome_cliente" placeholder="Nome Azienda S.p.A." required>
+            </div>
+            <div class="form-group">
+                <label class="required">p.IVA</label>
+                <input type="text" name="piva" id="piva" placeholder="Partita IVA" required>
+            </div>
+            <div class="form-group">
+                <label class="required">Nome e Cognome Cliente (Referente Principale)</label>
+                <input type="text" name="referente_titolare" id="referente_titolare" placeholder="Non necessariamente CEO" required>
+            </div>
+            <div class="form-group">
+                <label>Codice Contratto</label>
+                <input type="text" name="codice_contratto" id="codice_contratto" placeholder="Es: 123456789">
+            </div>
+            <div class="form-group">
+                <label class="required">IP (uno per riga)</label>
+                <textarea id="lista_ip" name="lista_ip" placeholder="1.2.3.4" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="required">Tipologia attività</label>
+                <select id="tipologia_attivita" name="tipologia_attivita" required onchange="checkLogic()">
+                    <option value="" disabled selected>-- Seleziona --</option>
+                    <option value="Penetration Test">Penetration Test</option>
+                    <option value="Vulnerability Assessment">Vulnerability Assessment</option>
+                </select>
+            </div>
+
+            <div id="vpn_alert" class="alert-message">⚠️ ATTENZIONE: Sono stati trovati degli indirizzi IP privati. Sarà necessario che ci create una VPN apposita per la raggiungibilità.</div>
+            <div id="sonda_alert" class="alert-message">⚠️ ATTENZIONE: Sono stati trovati degli indirizzi IP privati. Sarà necessario installare una sonda nella vostra rete per garantirci la raggiungibilità dei target.</div>
+
+            <div id="virtual_section" class="virtual-section">
+                <label class="required">Che tipo di software di virtualizzazione avete per le macchine virtuali?</label>
+                <select id="software_virtualizzazione" name="software_virtualizzazione">
+                    <option value="" disabled selected>-- Seleziona --</option>
+                    <option value="VMware">VMware</option>
+                    <option value="OpenStack">OpenStack</option>
+                    <option value="Microsoft Hyper-V">Microsoft Hyper-V</option>
+                    <option value="Citrix XenServer">Citrix XenServer</option>
+                    <option value="Amazon HVM Machine Image">Amazon HVM Machine Image</option>
+                    <option value="Microsoft Azure Image">Microsoft Azure Image</option>
+                    <option value="Google Compute Cloud Image">Google Compute Cloud Image</option>
+                    <option value="Oracle Cloud Image">Oracle Cloud Image</option>
+                    <option value="Alibaba Cloud Image">Alibaba Cloud Image</option>
+                    <option value="IBM Cloud Classic Image">IBM Cloud Classic Image</option>
+                    <option value="IBM Cloud VPC Image">IBM Cloud VPC Image</option>
+                    <option value="Nutanix">Nutanix</option>
+                    <option value="KVM">KVM</option>
+                    <option value="Red Hat Virtualization">Red Hat Virtualization</option>
+                    <option value="Proxmox">Proxmox</option>
+                    <option value="AzureStack Image">AzureStack Image</option>
+                    <option value="Red Hat OpenShift">Red Hat OpenShift</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section" id="notifica-section">
+            <h2>Contatti per Notifica Inizio/Modifica/Fine dell'Attività</h2>
+            <div class="contact-list"></div>
+            <button type="button" class="btn btn-add" onclick="addContact('notifica-section')">+ Aggiungi Contatto</button>
+        </div>
+
+        <div class="section" id="helpdesk-section">
+            <h2>Contatti per Helpdesk / Riferimento Tecnico</h2>
+            <div class="contact-list"></div>
+            <button type="button" class="btn btn-add" onclick="addContact('helpdesk-section')">+ Aggiungi Contatto</button>
+        </div>
+
+        <div class="section" id="report-section">
+            <h2>Contatti per Invio Report</h2>
+            <div class="contact-list"></div>
+            <button type="button" class="btn btn-add" onclick="addContact('report-section')">+ Aggiungi Contatto</button>
+        </div>
+
+        <button type="submit" class="btn btn-submit">Riepiloga Dati e Prepara Email</button>
+    </form>
+
+    <div id="outputContainer" class="output-box">
+        <p>I dati sono stati pronti. Clicca il pulsante sottostante per aprire il tuo client di posta.</p>
+        <a id="mailToLink" href="#" class="btn btn-mail">📧 Invia Email con Dati in Chiaro</a>
+    </div>
+</div>
+
+<script>
+    function isPrivateIP(ip) {
+        const parts = ip.split('.').map(Number);
+        if (parts.length !== 4) return false;
+        return (parts[0] === 10) || (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) || (parts[0] === 192 && parts[1] === 168);
+    }
+
+    function checkLogic() {
+        const hasPrivate = document.getElementById('lista_ip').value.split('\n').some(isPrivateIP);
+        const tipo = document.getElementById('tipologia_attivita').value;
+        document.getElementById('vpn_alert').style.display = (hasPrivate && tipo === "Penetration Test") ? 'block' : 'none';
+        document.getElementById('sonda_alert').style.display = (hasPrivate && tipo === "Vulnerability Assessment") ? 'block' : 'none';
+        document.getElementById('virtual_section').style.display = (hasPrivate && tipo === "Vulnerability Assessment") ? 'block' : 'none';
+        document.getElementById('software_virtualizzazione').required = (hasPrivate && tipo === "Vulnerability Assessment");
+    }
+
+    function addContact(sectionId) {
+        const list = document.querySelector(`#${sectionId} .contact-list`);
+        const div = document.createElement('div');
+        div.className = 'contact-entry';
+        div.innerHTML = `
+            <div class="form-group"><label class="required">Nominativo</label><input type="text" class="ref-name" required></div>
+            <div class="form-group"><label class="required">Email</label><input type="email" class="ref-email" required></div>
+            <div class="form-group"><label class="required">Telefono</label><input type="text" class="ref-tel" required></div>
+            <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">Rimuovi</button>
+        `;
+        list.appendChild(div);
+    }
+
+    window.onload = function() { ['notifica-section', 'helpdesk-section', 'report-section'].forEach(addContact); };
+
+    function formatContactsForEmail(sectionId) {
+        let text = "";
+        document.querySelectorAll(`#${sectionId} .contact-entry`).forEach((entry, i) => {
+            text += `   ${i+1}. ${entry.querySelector('.ref-name').value} | ${entry.querySelector('.ref-email').value} | ${entry.querySelector('.ref-tel').value}\n`;
+        });
+        return text || "   Nessun contatto inserito\n";
+    }
+
+    document.getElementById('clientForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const f = new FormData(this);
+        const nome = f.get('nome_cliente');
+        const contratto = f.get('codice_contratto') || "N/A";
+        const tipo = f.get('tipologia_attivita');
+
+        let emailBody = `Salve,\n\nDi seguito i dati necessari per far partire l'attività in oggetto:\n\n`;
+        emailBody += `--- DATI AZIENDALI ---\n`;
+        emailBody += `Azienda: ${nome}\n`;
+        emailBody += `P.IVA: ${f.get('piva')}\n`;
+        emailBody += `Referente: ${f.get('referente_titolare')}\n`;
+        emailBody += `Contratto: ${contratto}\n`;
+        emailBody += `Attività: ${tipo}\n`;
+        if(f.get('software_virtualizzazione')) emailBody += `Virtualizzazione: ${f.get('software_virtualizzazione')}\n`;
+        
+        emailBody += `\n--- LISTA TARGET IP ---\n${f.get('lista_ip')}\n`;
+        
+        emailBody += `\n--- CONTATTI INIZIO,MODIFICA E FINE ---\n${formatContactsForEmail('notifica-section')}`;
+        emailBody += `\n--- CONTATTI HELPDESK / TECNICO ---\n${formatContactsForEmail('helpdesk-section')}`;
+        emailBody += `\n--- CONTATTI INVIO REPORT ---\n${formatContactsForEmail('report-section')}\n\nSaluti,`;
+
+        const subject = encodeURIComponent(`${nome} - ${contratto} - ${tipo}`);
+        const mailto = `mailto:luca.marsilia@telsy.it?subject=${subject}&body=${encodeURIComponent(emailBody)}`;
+        
+        document.getElementById('mailToLink').href = mailto;
+        document.getElementById('outputContainer').style.display = 'block';
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>
