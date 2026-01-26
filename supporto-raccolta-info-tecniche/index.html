@@ -51,8 +51,9 @@
             </div>
             <div class="form-group">
                 <label class="required">IP (uno per riga)</label>
-                <textarea id="lista_ip" name="lista_ip" placeholder="1.2.3.4" required></textarea>
-            </div>
+                <textarea id="lista_ip" name="lista_ip" placeholder="84.123.12.154&#10;192.168.1.1&#10;www.target.it&#10;..." required></textarea>
+            </div><span style="color:red">Si prega di inserire i target che si desiderano testare in maniera chiara e senza possibilità di <strong>ambiguit&agrave;</strong>. Si consiglia di inserire host raggiungibili da internet (con IP pubblico) e non quelli privati al fine di velocizzare il processo. Se non &egrave; possibile inserire indirizzo pubblico fornire quello privato.</span>
+			
             
             <div class="form-group">
                 <label class="required">Tipologia attività</label>
@@ -93,18 +94,21 @@
 
         <div class="section" id="notifica-section">
             <h2>Contatti per Notifica Inizio/Modifica/Fine dell'Attività</h2>
+            <h4>A chi dobbiamo rivolgerci per notificare l'inizio e la fine dell'attivit&agrave;?</h4>
             <div class="contact-list"></div>
             <button type="button" class="btn btn-add" onclick="addContact('notifica-section')">+ Aggiungi Contatto</button>
         </div>
 
         <div class="section" id="helpdesk-section">
             <h2>Contatti per Helpdesk / Riferimento Tecnico</h2>
+			<h4>A chi dobbiamo rivolgerci per qualsiasi supporto di natura tecnica?</h4>
             <div class="contact-list"></div>
             <button type="button" class="btn btn-add" onclick="addContact('helpdesk-section')">+ Aggiungi Contatto</button>
         </div>
 
         <div class="section" id="report-section">
             <h2>Contatti per Invio Report</h2>
+			<h4>A chi dobbiamo fornire le risultanze dell'attivit&agrave;? (Fornire numero del cellulare in quanto ai numeri forniti verr&agrave; inviata via SMS la password per aprire il report)</h4>
             <div class="contact-list"></div>
             <button type="button" class="btn btn-add" onclick="addContact('report-section')">+ Aggiungi Contatto</button>
         </div>
@@ -113,8 +117,8 @@
     </form>
 
     <div id="outputContainer" class="output-box">
-        <p>I dati sono stati pronti. Clicca il pulsante sottostante per aprire il tuo client di posta.</p>
-        <a id="mailToLink" href="#" class="btn btn-mail">📧 Invia Email con Dati in Chiaro</a>
+        <p>I dati sono pronti. Clicca il pulsante sottostante per aprire il tuo client di posta.</p>
+        <a id="mailToLink" href="#" class="btn btn-mail">📧 Invia Email con i Dati.</a>
     </div>
 </div>
 
